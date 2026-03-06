@@ -32,13 +32,10 @@ export const router = createBrowserRouter([
 
   {
     element: <AuthLayout />,
-    // AuthLayout wraps all unauthenticated routes.
-    // No `path` here — this is a "layout route" that only provides the visual shell.
     children: [
       {
         path: '/login',
         element: <LoginPage />,
-        // /login renders the LoginPage inside the AuthLayout (Mars background + centered card).
       },
     ],
   },
