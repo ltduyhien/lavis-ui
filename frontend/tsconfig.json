@@ -15,5 +15,17 @@
     { "path": "./tsconfig.node.json" }
     // tsconfig.node.json: Governs Node-side files like vite.config.ts.
     // Has Node-oriented settings (Node types, ES2023 target, no DOM).
-  ]
+  ],
+
+  "compilerOptions": {
+    "baseUrl": ".",
+    // baseUrl: Root for resolving non-relative imports.
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+    // paths: Import alias so "@/shared/ui/button" resolves to "./src/shared/ui/button".
+    // Duplicated here from tsconfig.app.json because some tools (shadcn CLI)
+    // only read the root tsconfig.json, not the referenced configs.
+  }
 }

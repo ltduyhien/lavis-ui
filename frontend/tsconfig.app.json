@@ -95,10 +95,25 @@
     // noFallthroughCasesInSwitch: Error when a switch case falls through to the next
     // without a break/return. Prevents a common source of subtle bugs.
 
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
     // noUncheckedSideEffectImports: Ensures side-effect imports (import './styles.css')
     // actually resolve to existing files. Catches typos in CSS/asset imports that would
     // otherwise silently fail.
+
+    /* Path aliases */
+
+    "baseUrl": ".",
+    // baseUrl: The root directory for resolving non-relative imports.
+    // Setting it to "." means paths are relative to the frontend/ directory.
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+    // paths: Maps import aliases to file system paths.
+    // "@/*" → "./src/*" means `import { Button } from '@/shared/ui/button'`
+    // resolves to `./src/shared/ui/button`.
+    // Avoids deep relative imports like `../../../shared/ui/button`.
+    // Vite also needs this alias configured in vite.config.ts to work at runtime.
   },
 
   "include": ["src"]
