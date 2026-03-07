@@ -7,6 +7,8 @@ export interface AuthContextType {
   // isAuthenticated: true if the user has a valid JWT token in memory.
   userId: string | null
   // userId: The logged-in user's ID (e.g. "alice"), or null if not authenticated.
+  loginAt: number | null
+  // loginAt: Timestamp when the user logged in, for "Login since" display.
   // Extracted from the JWT payload after login.
   login: (userId: string, password: string) => Promise<void>
   // login: Async function to authenticate. Calls POST /token, stores the JWT,
