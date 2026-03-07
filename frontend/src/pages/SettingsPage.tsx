@@ -72,7 +72,7 @@ export function SettingsPage() {
     <div className="flex h-full min-h-0 flex-col gap-6 pt-4">
       <PageHeader title="Settings" subtitle="Station configuration" />
 
-      <section className="flex max-w-md flex-col gap-4 rounded-lg border border-input bg-muted/30 p-6">
+      <section className="flex max-w-md flex-col gap-4 rounded-lg border border-input bg-white p-6 dark:bg-muted/30">
         <h2 className="text-base font-semibold">Larvis Humor Setting</h2>
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
@@ -106,7 +106,7 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="flex max-w-md flex-col gap-4 rounded-lg border border-input bg-muted/30 p-6">
+      <section className="flex max-w-md flex-col gap-4 rounded-lg border border-input bg-white p-6 dark:bg-muted/30">
         <h2 className="mb-4 text-base font-semibold">Change Password</h2>
         {passwordSuccess && (
           <Alert variant="success" className="flex items-start justify-between gap-2 pr-10">
