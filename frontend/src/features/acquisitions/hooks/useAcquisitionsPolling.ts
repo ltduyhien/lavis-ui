@@ -17,11 +17,14 @@ export function useAcquisitionsPolling() {
   const [connectedSince, setConnectedSince] = useState<number | null>(null)
   const lastFingerprint = useRef<string | null>(null)
 
+  const cancelledRef = useRef(false)
+
   const fetchAcquisitions = useCallback(async (showLoading = true) => {
     if (showLoading) setIsLoading(true)
     try {
       setError(null)
       const data = await getAcquisitions()
+      if (cancelledRef.current) return
       setConnectedSince((prev) => prev ?? Date.now())
       const fp = fingerprint(data)
 
@@ -31,16 +34,21 @@ export function useAcquisitionsPolling() {
       lastFingerprint.current = fp
       setAcquisitions(data)
     } catch (e) {
+      if (cancelledRef.current) return
       const err = e as { message?: string; status?: number }
       const message = typeof err?.message === 'string' ? err.message : (e instanceof Error ? e.message : String(e))
       setError(new Error(message))
     } finally {
-      setIsLoading(false)
+      if (!cancelledRef.current) setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
+    cancelledRef.current = false
     fetchAcquisitions(true)
+    return () => {
+      cancelledRef.current = true
+    }
   }, [fetchAcquisitions])
 
   useEffect(() => {
