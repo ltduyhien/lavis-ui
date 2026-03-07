@@ -14,7 +14,7 @@ interface ReportStatsBlockProps {
 
 export function ReportStatsBlock({ monthLabel, acquisitions, selected, isLoading }: ReportStatsBlockProps) {
   return (
-    <section className="rounded-lg border border-input bg-muted/30 p-6">
+    <section className="min-w-0 rounded-md border border-input bg-muted/30 p-4 md:p-6">
       <h2 className="mb-4 text-base font-semibold">Statistics for {monthLabel}</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <div>

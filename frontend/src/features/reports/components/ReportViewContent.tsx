@@ -18,7 +18,7 @@ export function ReportViewContent({
   isLoading,
 }: ReportViewContentProps) {
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <ReportStatsBlock
         monthLabel={monthLabel}
         acquisitions={acquisitions}

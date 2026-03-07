@@ -39,7 +39,7 @@ export function ReportEditForm({
   onSubmit,
 }: ReportEditFormProps) {
   return (
-    <form id="report-form" onSubmit={onSubmit} className="flex flex-col gap-6">
+    <form id="report-form" onSubmit={onSubmit} className="flex min-w-0 flex-col gap-6">
       <ReportStatsBlock
         monthLabel={monthLabel}
         acquisitions={acquisitions}
@@ -57,7 +57,7 @@ export function ReportEditForm({
               value={customReport}
               onChange={(e) => onCustomReportChange(e.target.value)}
               placeholder="Add any additional notes or observations for this report…"
-              className="min-h-[140px] w-full resize-y rounded-lg border border-input bg-muted/30 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-[140px] w-full resize-y rounded-md border border-input bg-muted/30 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               rows={5}
             />
           </div>
@@ -80,7 +80,7 @@ export function ReportEditForm({
                 }
               }}
               className={cn(
-                'flex min-h-[140px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-input bg-muted/30 px-4 py-6 transition-colors',
+                'flex min-h-[140px] flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-input bg-muted/30 px-4 py-6 transition-colors',
                 'hover:border-muted-foreground/40 hover:bg-muted/50',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               )}
@@ -118,7 +118,7 @@ export function ReportEditForm({
                   return (
                     <li
                       key={`${f.name}-${i}`}
-                      className="flex items-center gap-2 rounded-md bg-muted/50 px-2 py-1.5 text-sm"
+                      className="flex items-center gap-2 rounded bg-muted/50 px-2 py-1.5 text-sm"
                     >
                       <span aria-hidden>{getFileIcon(ext)}</span>
                       <span className="min-w-0 flex-1 truncate" title={f.name}>
