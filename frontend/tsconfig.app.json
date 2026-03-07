@@ -29,8 +29,8 @@
     // ESNext = native ES modules (import/export). Vite requires this because it
     // serves modules natively during development via the browser's ES module support.
 
-    "types": ["vite/client"],
-    // types: Explicitly include type definitions for Vite's client-side features.
+    "types": ["vite/client", "jest", "@testing-library/jest-dom"],
+    // types: Explicitly include type definitions for Vite's client-side features and Jest globals.
     // This gives you types for import.meta.env (environment variables),
     // import.meta.hot (HMR API), and asset imports (e.g. importing .svg files).
 
@@ -116,7 +116,8 @@
     // Vite also needs this alias configured in vite.config.ts to work at runtime.
   },
 
-  "include": ["src"]
-  // include: Only type-check files inside the src/ directory.
+  "include": ["src"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"]
+  // exclude: Test files are type-checked by Jest; exclude from app build.
   // Excludes node_modules, dist, config files, etc. from this config's scope.
 }
