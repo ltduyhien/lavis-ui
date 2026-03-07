@@ -9,7 +9,7 @@ export interface ChartDataPoint {
   scanCount: number
 }
 
-const MS_PER_DAY = 86400
+const SECONDS_PER_DAY = 86400
 
 function startOfWeek(ts: number): number {
   const d = new Date(ts * 1000)
@@ -142,86 +142,11 @@ export function filterAcquisitionsForSinglePeriod(
   }
 }
 
-/** Returns acquisitions that fall within the current time window. */
-export function filterAcquisitionsByWindow(
-  acquisitions: Acquisition[],
-  groupBy: GroupBy,
-  windowOffset: number
-): Acquisition[] {
-  if (!acquisitions.length) return []
-  const buckets = new Map<string, Acquisition[]>()
-  for (const a of acquisitions) {
-    const key = getBucketKey(a.timestamp, groupBy)
-    const arr = buckets.get(key) ?? []
-    arr.push(a)
-    buckets.set(key, arr)
-  }
-  const keys = Array.from(buckets.keys()).sort()
-  const step = Math.min(BARS_PER_VIEW[groupBy], keys.length)
-  const totalBuckets = keys.length
-  const maxStart = Math.max(0, totalBuckets - step)
-  const startIdx = Math.max(0, Math.min(maxStart, maxStart + windowOffset))
-  const endIdx = Math.min(totalBuckets, startIdx + step)
-  const windowKeys = new Set(keys.slice(startIdx, endIdx))
-  return acquisitions.filter((a) => windowKeys.has(getBucketKey(a.timestamp, groupBy)))
-}
-
-export interface CompareDataPoint {
-  period: string
-  label: string
-  oreSitesCurrent: number
-  oreSitesPrevious: number
-}
-
-/** Returns current-period vs previous-period data for comparison charts. */
-export function groupAcquisitionsCompare(
-  acquisitions: Acquisition[],
-  groupBy: GroupBy,
-  windowOffset: number
-): { data: CompareDataPoint[]; canPrev: boolean; canNext: boolean } {
-  const step = BARS_PER_VIEW[groupBy]
-  if (!acquisitions.length) {
-    return { data: [], canPrev: false, canNext: false }
-  }
-
-  const buckets = new Map<string, { oreSites: number; scanCount: number }>()
-  for (const a of acquisitions) {
-    const key = getBucketKey(a.timestamp, groupBy)
-    const existing = buckets.get(key) ?? { oreSites: 0, scanCount: 0 }
-    existing.oreSites += a.ore_sites
-    existing.scanCount += 1
-    buckets.set(key, existing)
-  }
-
-  const keys = Array.from(buckets.keys()).sort()
-  if (!keys.length) return { data: [], canPrev: false, canNext: false }
-
-  const totalBuckets = keys.length
-  const maxStart = Math.max(0, totalBuckets - step)
-  const startIdx = Math.max(0, Math.min(maxStart, maxStart + windowOffset))
-  const endIdx = Math.min(totalBuckets, startIdx + step)
-
-  const canPrev = startIdx > 0
-  const canNext = windowOffset < 0
-
-  const currentKeys = keys.slice(startIdx, endIdx)
-  const prevStartIdx = Math.max(0, startIdx - step)
-  const prevEndIdx = startIdx
-  const previousKeys = keys.slice(prevStartIdx, prevEndIdx)
-
-  const data: CompareDataPoint[] = currentKeys.map((key, i) => {
-    const current = buckets.get(key)!
-    const prevKey = previousKeys[i]
-    const prev = prevKey ? buckets.get(prevKey) : undefined
-    return {
-      period: key,
-      label: formatLabel(key, groupBy),
-      oreSitesCurrent: current.oreSites,
-      oreSitesPrevious: prev?.oreSites ?? 0,
-    }
-  })
-
-  return { data, canPrev, canNext }
+export const GROUP_LABELS: Record<GroupBy, string> = {
+  day: 'By Day',
+  week: 'By Week',
+  month: 'By Month',
+  year: 'By Year',
 }
 
 export function getAvailableGroupBy(acquisitions: Acquisition[]): GroupBy[] {
@@ -229,7 +154,7 @@ export function getAvailableGroupBy(acquisitions: Acquisition[]): GroupBy[] {
   const timestamps = acquisitions.map((a) => a.timestamp)
   const minTs = Math.min(...timestamps)
   const maxTs = Math.max(...timestamps)
-  const spanDays = (maxTs - minTs) / MS_PER_DAY
+  const spanDays = (maxTs - minTs) / SECONDS_PER_DAY
 
   const options: GroupBy[] = ['day']
   if (spanDays >= 7) options.push('week')
