@@ -67,6 +67,19 @@ function ChartContainer({
   )
 }
 
+/** Sanitize for safe use in CSS context — prevents XSS via dangerouslySetInnerHTML */
+function sanitizeForCss(value: string): string {
+  return String(value)
+    .replace(/</g, '\\3c ')
+    .replace(/>/g, '\\3e ')
+    .replace(/["']/g, '')
+}
+
+/** Restrict to safe CSS identifier chars [a-zA-Z0-9_-] to prevent selector/property injection */
+function sanitizeCssIdentifier(value: string): string {
+  return String(value).replace(/[^a-zA-Z0-9_-]/g, '')
+}
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
     ([, config]) => config.theme || config.color
@@ -76,25 +89,29 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
+  const safeId = sanitizeCssIdentifier(id)
+
   return (
     <style
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
             ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+${prefix} [data-chart="${safeId}"] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    const safeKey = sanitizeCssIdentifier(key)
+    const safeColor = color ? sanitizeForCss(color) : ''
+    return safeColor ? `  --color-${safeKey}: ${safeColor};` : null
   })
-  .join("\n")}
+  .join('\n')}
 }
 `
           )
-          .join("\n"),
+          .join('\n'),
       }}
     />
   )
@@ -171,7 +188,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        "grid min-w-[8rem] items-start gap-1.5 rounded-md border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
         className
       )}
     >
