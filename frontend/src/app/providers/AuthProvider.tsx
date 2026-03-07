@@ -2,7 +2,7 @@
 // Wraps the entire app so any component can access auth state via useAuth().
 // Stores the JWT in memory (not localStorage) for XSS protection.
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 // useState: React hook to hold state (userId) that triggers re-renders when it changes.
 // useCallback: Memoizes functions so they keep the same reference across re-renders.
 //   Prevents unnecessary re-renders of child components that depend on these functions.
@@ -49,11 +49,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
-    // logout: Clear auth state and token. The router will redirect to /login
-    // because isAuthenticated becomes false.
     setAccessToken(null)
     setUserId(null)
     setLoginAt(null)
+  }, [])
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUserId(null)
+      setLoginAt(null)
+    }
+    window.addEventListener('auth:unauthorized', handleUnauthorized)
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized)
   }, [])
 
   const value: AuthContextType = {

@@ -64,11 +64,13 @@ export async function api<T>(
   })
 
   if (!response.ok) {
-    // response.ok: true if HTTP status is 200-299, false otherwise.
-    // We throw a structured error so callers can catch and display it.
     const message = await response.text().catch(() => 'Request failed')
-    // response.text(): Read the error body as plain text.
-    // .catch(): If even reading the body fails, fall back to a generic message.
+    if (response.status === 401) {
+      accessToken = null
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'))
+      }
+    }
     const error: ApiError = { message, status: response.status }
     throw error
   }
