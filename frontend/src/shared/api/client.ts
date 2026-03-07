@@ -63,7 +63,9 @@ export async function api<T>(
 
   if (!response.ok) {
     const message = await response.text().catch(() => 'Request failed')
-    if (response.status === 401) {
+    // Only clear token and logout on 401 from authenticated endpoints.
+    // 401 from /token means "wrong credentials for this login attempt", not "session expired".
+    if (response.status === 401 && !endpoint.includes('/token')) {
       accessToken = null
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('auth:unauthorized'))
