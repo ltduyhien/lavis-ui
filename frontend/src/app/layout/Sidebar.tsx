@@ -1,14 +1,41 @@
+import { Activity, FileText, Settings } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 import { cn } from '@/shared/utils/cn'
 
+function formatLoginSince(ts: number): string {
+  const d = new Date(ts)
+  const now = new Date()
+  const sameDay = d.toDateString() === now.toDateString()
+  return sameDay
+    ? `Logged in at ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+    : `Logged in ${d.toLocaleDateString()}`
+}
+
+function getInitials(userId: string): string {
+  const parts = userId.trim().split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase().slice(0, 2)
+  }
+  return userId.slice(0, 2).toUpperCase()
+}
+
+function getDisplayName(userId: string): string {
+  return userId
+    .split(/[-_\s]/)
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+    .join(' ')
+}
+
 const navItems = [
-  { to: '/activities', label: 'Activities' },
-  { to: '/reports', label: 'Reports' },
-  { to: '/space-command', label: 'Space Command' },
-  { to: '/settings', label: 'Settings' },
+  { to: '/activities', label: 'Activities', icon: Activity },
+  { to: '/reports', label: 'Reporting', icon: FileText },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ] as const
 
 export function Sidebar() {
+  const { userId, loginAt } = useAuth()
+
   return (
     <aside
       className="flex w-56 flex-col border-r border-border bg-sidebar px-4 py-6"
@@ -16,31 +43,51 @@ export function Sidebar() {
     >
       <div className="mb-8">
         <div className="text-xl font-bold tracking-tight text-foreground">
-          Larvis
+          L4RV1S
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          Mars Station Assistant
+          Hell-O hoo-man!
         </p>
       </div>
 
-      <nav className="flex flex-col gap-1">
-        {navItems.map(({ to, label }) => (
+      <nav className="flex flex-1 flex-col gap-1">
+        {navItems.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
               cn(
-                'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar',
                 isActive
-                  ? 'bg-mars-500/20 text-mars-500 dark:bg-mars-500/20 dark:text-mars-500'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  ? 'bg-black text-mars-500 dark:bg-black/80 dark:text-mars-500'
+                  : 'text-foreground hover:bg-accent hover:text-accent-foreground dark:text-white'
               )
             }
           >
+            <Icon className="size-4 shrink-0" aria-hidden />
             {label}
           </NavLink>
         ))}
       </nav>
+
+      {userId && (
+        <div className="mt-auto flex shrink-0 items-center gap-3 py-2.5">
+          <div
+            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-foreground"
+            aria-hidden
+          >
+            {getInitials(userId)}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-foreground">
+              {getDisplayName(userId)}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {loginAt ? formatLoginSince(loginAt) : 'Logged in'}
+            </p>
+          </div>
+        </div>
+      )}
     </aside>
   )
 }

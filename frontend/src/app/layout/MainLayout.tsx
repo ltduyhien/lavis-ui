@@ -8,13 +8,17 @@ import { Sidebar } from './Sidebar'
 export function MainLayout() {
   return (
     <div className="flex h-svh max-h-svh overflow-hidden bg-background text-foreground">
-      {/* flex: Horizontal layout (sidebar + content side by side).
-          min-h-svh: Fill at least the full viewport height.
-          bg-background text-foreground: Use shadcn's theme-aware CSS variables. */}
+      {/* Skip link: visible on focus for keyboard users (WCAG 2.4.1) */}
+      <a
+        href="#main-content"
+        className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-primary focus-visible:px-4 focus-visible:py-2 focus-visible:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        Skip to main content
+      </a>
 
       <Sidebar />
 
-      <main className="flex min-h-0 flex-1 flex-col overflow-hidden px-10 py-6 [&>*]:min-h-0">
+      <main id="main-content" className="flex min-h-0 flex-1 flex-col overflow-hidden px-10 py-6 [&>*]:min-h-0" tabIndex={-1}>
         {/* flex-1: Take all remaining horizontal space after the sidebar.
             px-10 py-6: horizontal and vertical padding for the content area. */}
         <Outlet />
