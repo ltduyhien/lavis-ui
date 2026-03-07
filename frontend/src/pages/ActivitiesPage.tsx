@@ -12,7 +12,7 @@ import { Button } from '@/shared/ui/button'
 const ACTIVITIES_HEADER = (
   <h1 className="text-2xl">
     <span className="font-bold">Activities</span>
-    <span className="font-thin text-lg"> | Satellite and resource operations</span>
+    <span className="font-normal text-lg"> | Satellite and resource operations</span>
   </h1>
 )
 
@@ -87,38 +87,38 @@ export function ActivitiesPage() {
       )}
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-hidden sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Satellite Status</p>
           <p className="text-lg font-semibold text-sky-500 dark:text-[oklch(0.72_0.12_230)]">{error ? 'Offline' : 'Operational'}</p>
         </div>
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Satellite Uptime</p>
           <p className="text-lg font-semibold text-sky-500 dark:text-[oklch(0.72_0.12_230)]">{displayUptime}</p>
         </div>
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Total Ore Sites</p>
           <p className="text-lg font-semibold text-mars-500">
             {acquisitions.reduce((sum, a) => sum + a.ore_sites, 0)}
           </p>
         </div>
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Ore Discovery Today</p>
           <p className="text-lg font-semibold text-mars-500">{totalOreSitesToday(acquisitions)}</p>
         </div>
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Last Ore Discovery</p>
           <p className="text-lg font-semibold text-foreground">{lastOreFound(acquisitions)}</p>
         </div>
-        <div className="shrink-0 rounded-lg border border-border bg-card px-4 py-3">
+        <div className="shrink-0 rounded-lg border border-white bg-white dark:border-border dark:bg-card px-4 py-3">
           <p className="text-sm text-muted-foreground">Total Scans</p>
           <p className="text-lg font-semibold text-foreground">{acquisitions.length}</p>
         </div>
-        <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card p-6 sm:col-span-2 md:col-span-3 lg:col-span-3">
+        <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-white bg-white dark:border-border dark:bg-card p-6 sm:col-span-2 md:col-span-3 lg:col-span-3">
           <div className="min-h-0 flex-1">
             <OreFindingsChart acquisitions={acquisitions} title="Ore Discoveries" />
           </div>
         </div>
-        <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card p-6 sm:col-span-2 md:col-span-3 lg:col-span-3">
+        <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-white bg-white dark:border-border dark:bg-card p-6 sm:col-span-2 md:col-span-3 lg:col-span-3">
           <h2 className="mb-4 shrink-0 text-lg font-semibold">Time Distribution for Ore Discovery</h2>
           <div className="min-h-0 flex-1">
             <TimeDistributionChart acquisitions={acquisitions} />

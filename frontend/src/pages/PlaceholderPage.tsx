@@ -1,13 +1,17 @@
 interface PlaceholderPageProps {
   title: string
-  description: string
+  subtitle: string
 }
 
-export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
+export function PlaceholderPage({ title, subtitle }: PlaceholderPageProps) {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground">{description}</p>
+    <div className="flex h-full min-h-0 flex-col gap-4 pt-4">
+      <div className="flex shrink-0 items-center justify-between pb-6">
+        <h1 className="text-2xl">
+          <span className="font-bold">{title}</span>
+          <span className="font-normal text-lg"> | {subtitle}</span>
+        </h1>
+      </div>
     </div>
   )
 }
