@@ -1,3 +1,5 @@
+import { UtcTime } from '@/shared/ui/utc-time'
+
 interface PlaceholderPageProps {
   title: string
   subtitle: string
@@ -11,6 +13,7 @@ export function PlaceholderPage({ title, subtitle }: PlaceholderPageProps) {
           <span className="font-bold">{title}</span>
           <span className="font-normal text-lg"> | {subtitle}</span>
         </h1>
+        <UtcTime />
       </div>
     </div>
   )

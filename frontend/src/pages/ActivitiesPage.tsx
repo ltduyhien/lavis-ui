@@ -8,6 +8,7 @@ import {
   lastOreFound,
 } from '@/features/acquisitions/utils/format'
 import { Button } from '@/shared/ui/button'
+import { UtcTime } from '@/shared/ui/utc-time'
 
 const ACTIVITIES_HEADER = (
   <h1 className="text-2xl">
@@ -41,7 +42,10 @@ export function ActivitiesPage() {
   if (error) {
     return (
       <div className="space-y-4 pt-4">
-        {ACTIVITIES_HEADER}
+        <div className="flex shrink-0 items-center justify-between pb-6">
+          {ACTIVITIES_HEADER}
+          <UtcTime />
+        </div>
         <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-destructive">
           Failed to load: {error.message}
         </div>
@@ -55,7 +59,10 @@ export function ActivitiesPage() {
   if (isLoading && acquisitions.length === 0) {
     return (
       <div className="pt-4">
-        {ACTIVITIES_HEADER}
+        <div className="flex shrink-0 items-center justify-between pb-6">
+          {ACTIVITIES_HEADER}
+          <UtcTime />
+        </div>
         <p className="text-muted-foreground">Loading ore acquisition data…</p>
       </div>
     )
@@ -65,6 +72,7 @@ export function ActivitiesPage() {
     <div className="flex h-full min-h-0 flex-col gap-4 pt-4">
       <div className="flex shrink-0 items-center justify-between pb-6">
         {ACTIVITIES_HEADER}
+        <UtcTime />
       </div>
 
       {hasNewData && (
@@ -119,7 +127,7 @@ export function ActivitiesPage() {
           </div>
         </div>
         <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-white bg-white dark:border-border dark:bg-card p-6 sm:col-span-2 md:col-span-3 lg:col-span-3">
-          <h2 className="mb-4 shrink-0 text-lg font-semibold">Time Distribution for Ore Discovery</h2>
+          <h2 className="mb-4 shrink-0 text-base font-semibold">Time Distribution for Ore Discovery</h2>
           <div className="min-h-0 flex-1">
             <TimeDistributionChart acquisitions={acquisitions} />
           </div>

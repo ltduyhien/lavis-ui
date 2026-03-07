@@ -1,5 +1,5 @@
 import { Activity, FileText, Settings } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { cn } from '@/shared/utils/cn'
 
@@ -34,7 +34,7 @@ const navItems = [
 ] as const
 
 export function Sidebar() {
-  const { userId, loginAt } = useAuth()
+  const { userId, loginAt, logout } = useAuth()
 
   return (
     <aside
@@ -42,10 +42,13 @@ export function Sidebar() {
       aria-label="Main navigation"
     >
       <div className="mb-8">
-        <div className="text-xl font-bold tracking-tight text-foreground">
+        <Link
+          to="/activities"
+          className="block text-xl font-bold tracking-tight text-foreground transition-colors hover:text-mars-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar rounded"
+        >
           L4RV1S
-        </div>
-        <p className="mt-0.5 text-xs text-muted-foreground">
+        </Link>
+        <p className="mt-0.5 text-sm text-muted-foreground">
           Hell-O hoo-man!
         </p>
       </div>
@@ -85,6 +88,13 @@ export function Sidebar() {
             <p className="truncate text-xs text-muted-foreground">
               {loginAt ? formatLoginSince(loginAt) : 'Logged in'}
             </p>
+            <button
+              type="button"
+              onClick={logout}
+              className="mt-1 text-xs text-mars-500 transition-colors hover:text-mars-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar rounded"
+            >
+              Log out
+            </button>
           </div>
         </div>
       )}
