@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // children: The React component tree rendered inside <AuthProvider>...</AuthProvider>.
 
   const [userId, setUserId] = useState<string | null>(null)
+  const [loginAt, setLoginAt] = useState<number | null>(null)
   // userId: The currently logged-in user's ID, or null if not authenticated.
   // This is the single source of truth for auth state in the entire app.
 
@@ -42,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAccessToken(response.access)
     // Store the JWT in the API client's memory for all future requests.
     setUserId(id)
+    setLoginAt(Date.now())
     // Update React state with the user ID — triggers a re-render,
     // which makes isAuthenticated flip to true throughout the app.
   }, [])
@@ -51,12 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // because isAuthenticated becomes false.
     setAccessToken(null)
     setUserId(null)
+    setLoginAt(null)
   }, [])
 
   const value: AuthContextType = {
     isAuthenticated: userId !== null,
-    // isAuthenticated: Derived from userId — true if we have a logged-in user.
     userId,
+    loginAt,
     login,
     logout,
   }
