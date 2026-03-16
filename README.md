@@ -33,7 +33,7 @@ Clone and checkout
 
 ```bash
 git clone <repo-url>
-cd lavis-ui
+cd satellites-ui
 git checkout main
 ```
 
